@@ -88,15 +88,15 @@ Unit test 以 registry 為基準，要求每一個啟用工具都有正常輸入
 
 ## 使用次數統計
 
-目前只做本裝置匿名的各工具使用次數統計，儲存在 `localStorage`，並只顯示於對應工具頁面。資料只包含：
+各工具的匿名全站使用次數透過同站 `/api/tool-usage` route handler 代理到 backend，並儲存在 MongoDB。每個頁面載入或切換路由時都會取得最新統計；工具成功執行後才送出一次計數，接著再次取得最新數字。資料只包含：
 
 - tool slug 對應 count
 
-不包含輸入、輸出、clipboard、secret、JWT、private key 或可識別個人資料。統計失敗不會阻止工具執行。
+不包含輸入、輸出、clipboard、secret、JWT、private key 或可識別個人資料。使用次數不再儲存於 localStorage，且統計失敗不會阻止工具執行。
 
 ## 後端邊界
 
-MVP 不需要後端 API。只有未來明確需要跨裝置或全站 aggregate usage counter 時，才會整合同層 `backend`，且工具本身仍必須在後端失敗時可用。任何後端統計都不得接收工具輸入或輸出內容。
+統計 API 使用同層 `backend` 的 `GET /api/tool-usage` 與 `POST /api/tool-usage`；可用 `BACKEND_API_BASE_URL` 覆寫來源，預設為 `https://api.iistw.com`。任何後端統計都不得接收工具輸入或輸出內容。
 
 ## UI 操作
 

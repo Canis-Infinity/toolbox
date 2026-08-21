@@ -1,7 +1,7 @@
 "use client";
 
 import { AlertTriangle, CircleCheck, Copy, Download, FileOutput, Play, RotateCcw, Trash2, Wand2 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import dynamic from "next/dynamic";
 import { CodeBlock } from "@/components/code-block";
@@ -30,7 +30,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { executeTool } from "@/lib/tools/execute";
 import { CODE_EXAMPLES, CODE_FORMAT_LANGUAGES, CODE_MINIFY_LANGUAGES } from "@/lib/tools/code-config";
 import type { ToolDefinition, ToolFailure, ToolOptions, ToolResult } from "@/lib/tools/types";
-import { incrementUsage, readUsage } from "@/lib/usage";
+import { useUsage } from "@/lib/usage";
 
 const MONOSPACE_INPUT_LANGUAGES = new Set(["json", "yaml", "ini", "nginx", "jwt"]);
 const MONOSPACE_INPUT_PREFIXES = ["base64-", "url-", "unicode-"];
@@ -54,7 +54,8 @@ export function ToolWorkbench({ tool }: { tool: ToolDefinition }) {
   const [error, setError] = useState<ToolFailure | null>(null);
   const [running, setRunning] = useState(false);
   const [clearDialogOpen, setClearDialogOpen] = useState(false);
-  const [usageCount, setUsageCount] = useState(0);
+  const { tools: usageByTool, recordUsage } = useUsage();
+  const usageCount = usageByTool[tool.slug] ?? 0;
   const [options, setOptions] = useState<ToolOptions>({ indent: "2", mode: "component", keyEncoding: "utf8", outputEncoding: tool.slug === "hmac-generator" ? "hex" : "base64url", bytes: 32, codeLanguage: "javascript" });
   const inputless = ["jwt-secret-generator", "random-secret-generator", "timezone-display", "uuid-generator"].includes(tool.slug);
   const secretGenerator = tool.slug === "jwt-secret-generator" || tool.slug === "random-secret-generator";
@@ -66,10 +67,6 @@ export function ToolWorkbench({ tool }: { tool: ToolDefinition }) {
   const monospaceInput = tool.category === "code" || MONOSPACE_INPUT_LANGUAGES.has(tool.inputLanguage) || MONOSPACE_INPUT_PREFIXES.some((prefix) => tool.slug.startsWith(prefix));
   const example = tool.category === "code" ? CODE_EXAMPLES[options.codeLanguage ?? "javascript"] ?? tool.example : tool.example;
 
-  useEffect(() => {
-    setUsageCount(readUsage().tools[tool.slug] ?? 0);
-  }, [tool.slug]);
-
   const run = async (value = input) => {
     setRunning(true);
     const next = await executeTool(tool.slug, value, options);
@@ -77,8 +74,7 @@ export function ToolWorkbench({ tool }: { tool: ToolDefinition }) {
     if (next.ok) {
       setResult(next);
       setError(null);
-      const usage = incrementUsage(tool.slug);
-      setUsageCount(usage.tools[tool.slug] ?? 0);
+      await recordUsage(tool.slug);
     } else {
       setResult(null);
       setError(next);

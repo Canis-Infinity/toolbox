@@ -8,6 +8,7 @@ import "./globals.css";
 import { Fira_Code, Noto_Sans_TC } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "next-themes";
+import { UsageProvider } from "@/lib/usage";
 
 const firaCode = Fira_Code({ subsets: ["latin"], variable: "--font-fira-code", display: "swap" });
 const notoSansTc = Noto_Sans_TC({ subsets: ["latin"], weight: ["400", "500", "600", "700"], variable: "--font-noto-sans-tc", display: "swap" });
@@ -82,9 +83,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
         <NextIntlClientProvider>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-            <TooltipProvider>
-              <AppShell>{children}</AppShell>
-            </TooltipProvider>
+            <UsageProvider>
+              <TooltipProvider>
+                <AppShell>{children}</AppShell>
+              </TooltipProvider>
+            </UsageProvider>
           </ThemeProvider>
         </NextIntlClientProvider>
       </body>

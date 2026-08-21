@@ -1,16 +1,33 @@
 import { expect, test } from "@playwright/test";
 
 test("home and tool workflow", async ({ page }) => {
+  let count = 0;
+  let getRequests = 0;
+  await page.route("**/api/tool-usage", async (route) => {
+    if (route.request().method() === "POST") {
+      count += 1;
+      await route.fulfill({ status: 201, contentType: "application/json", body: JSON.stringify({ toolSlug: "json-formatter" }) });
+      return;
+    }
+    getRequests += 1;
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({ total: count, tools: count ? [{ toolSlug: "json-formatter", count }] : [] })
+    });
+  });
+
   await page.goto("/");
   await expect(page.getByRole("heading", { name: /工程師工具箱|Developer Tools/i })).toBeVisible();
   await expect(page.getByText(/本裝置總使用次數|Uses on this device/i)).toHaveCount(0);
   await page.goto("/tools/json-formatter");
-  await expect(page.getByText(/本工具使用次數 0|Tool uses: 0/i)).toBeVisible();
+  await expect(page.getByText(/全站使用次數 0|Global uses: 0/i)).toBeVisible();
   await expect(page.getByText(/僅限本機|Local only/i)).toHaveCount(0);
   await page.getByRole("textbox").fill('{"b":1,"a":2}');
   await page.getByRole("button", { name: /格式化|Format|Run/i }).click();
   await expect(page.getByLabel(/json output/i)).toContainText('"a"');
-  await expect(page.getByText(/本工具使用次數 1|Tool uses: 1/i)).toBeVisible();
+  await expect(page.getByText(/全站使用次數 1|Global uses: 1/i)).toBeVisible();
+  expect(getRequests).toBeGreaterThanOrEqual(3);
 });
 
 test("input tools disable execution until content is available", async ({ page }) => {
