@@ -1,19 +1,22 @@
 services:
   toolbox:
+    image: node:24-alpine
     container_name: iistw-toolbox
-    build:
-      context: .
+    working_dir: /app
     environment:
       NODE_ENV: production
+      NEXT_TELEMETRY_DISABLED: 1
       PORT: 6011
-      HOSTNAME: 0.0.0.0
       NEXT_PUBLIC_SITE_URL: https://toolbox.iistw.com
+    volumes:
+      - ./:/app
+      - toolbox_node_modules:/app/node_modules
+      - toolbox_next:/app/.next
     ports:
       - "6011:6011"
-    healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:6011/ >/dev/null 2>&1 || exit 1"]
-      interval: 30s
-      timeout: 5s
-      retries: 5
-      start_period: 60s
+    command: sh -c "if [ -f package-lock.json ]; then npm ci --include=dev; else npm install --include=dev; fi && npm run build && npm prune --omit=dev && npm start"
     restart: unless-stopped
+
+volumes:
+  toolbox_node_modules:
+  toolbox_next:

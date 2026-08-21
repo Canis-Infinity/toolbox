@@ -60,10 +60,10 @@ http://localhost:6011
 在 `C:\nginx-1.18.0\react\iistw.com\toolbox` 直接執行：
 
 ```bash
-docker compose up -d --build --force-recreate
+docker compose up -d --force-recreate
 ```
 
-這個指令會 build production image 並啟動網站。Container name 為 `iistw-toolbox`，內外 port 固定 `6011:6011`，health check 會檢查 `http://127.0.0.1:6011/`。
+Compose 直接使用 `node:24-alpine`，掛載專案目錄、`node_modules` 與 `.next` 具名 volume。容器啟動時會安裝完整依賴、執行 production build、移除 dev dependencies，再以 `next start` 啟動網站。Container name 為 `iistw-toolbox`，內外 port 固定 `6011:6011`。
 
 ## 測試與驗證
 
