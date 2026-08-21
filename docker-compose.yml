@@ -1,0 +1,19 @@
+services:
+  toolbox:
+    container_name: iistw-toolbox
+    build:
+      context: .
+    environment:
+      NODE_ENV: production
+      PORT: 6011
+      HOSTNAME: 0.0.0.0
+      NEXT_PUBLIC_SITE_URL: https://toolbox.iistw.com
+    ports:
+      - "6011:6011"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:6011/ >/dev/null 2>&1 || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 60s
+    restart: unless-stopped
