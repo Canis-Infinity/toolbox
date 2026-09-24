@@ -14,7 +14,7 @@ services:
       - toolbox_next:/app/.next
     ports:
       - "6011:6011"
-    command: sh -c "if [ -f package-lock.json ]; then npm ci --include=dev; else npm install --include=dev; fi && npm run build && npm prune --omit=dev && npm start"
+    command: sh -c "if [ -f package-lock.json ]; then npm ci --include=dev; else npm install --include=dev; fi && npm run build && npm prune --omit=dev --no-save && npm start"
     restart: unless-stopped
 
 volumes:
