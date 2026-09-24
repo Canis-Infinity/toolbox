@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex,nofollow" />
+    <meta name="color-scheme" content="light dark" />
+    <title>暫時無法開啟｜Developer Toolbox</title>
+    <style>
+      :root {
+        font-family: system-ui, "Noto Sans TC", sans-serif;
+        color: #171717;
+        background: #fafafa;
+        color-scheme: light dark;
+        --muted: #666;
+        --accent: #6366f1;
+        --border: #ddd;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100svh;
+        display: flex;
+        flex-direction: column;
+      }
+      header,
+      footer {
+        padding: 24px clamp(20px, 5vw, 64px);
+      }
+      header {
+        font-weight: 600;
+        border-bottom: 1px solid var(--border);
+      }
+      main {
+        display: grid;
+        place-items: center;
+        flex: 1;
+        padding: 32px 20px;
+      }
+      section {
+        max-width: 440px;
+        text-align: center;
+      }
+      svg {
+        width: 40px;
+        height: 40px;
+        color: var(--muted);
+      }
+      h1 {
+        font-size: clamp(20px, 4vw, 26px);
+        margin: 20px 0 12px;
+      }
+      p {
+        line-height: 1.8;
+        color: var(--muted);
+        margin: 0 0 24px;
+      }
+      button {
+        font: inherit;
+        font-weight: 600;
+        border: 0;
+        border-radius: 8px;
+        padding: 12px 20px;
+        background: var(--accent);
+        color: #fff;
+        cursor: pointer;
+      }
+      button:focus-visible {
+        outline: 3px solid var(--accent);
+        outline-offset: 4px;
+      }
+      footer {
+        text-align: center;
+        font-size: 12px;
+        color: var(--muted);
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          color: #fafafa;
+          background: #0a0a0a;
+          --muted: #a3a3a3;
+          --border: #292929;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>Developer Toolbox</header>
+    <main>
+      <section aria-labelledby="title">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linecap="round"
+          aria-hidden="true"
+        >
+          <path
+            d="m2 2 20 20M8.5 16.5a5 5 0 0 1 7 0M12 20h.01M5 12a10 10 0 0 1 5-2.5M14 9.5a10 10 0 0 1 5 2.5M2 8a16 16 0 0 1 4-2.6M10 4.2A16 16 0 0 1 22 8"
+          />
+        </svg>
+        <h1 id="title">暫時無法開啟網站</h1>
+        <p>網路可能已中斷，或服務正在啟動。<br />請確認連線，稍後再試。</p>
+        <form action="/" method="get">
+          <button type="submit">重新開啟網站</button>
+        </form>
+      </section>
+    </main>
+    <footer>Developer Toolbox · 服務恢復後即可繼續使用</footer>
+  </body>
+</html>

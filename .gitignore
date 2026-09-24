@@ -8,3 +8,9 @@ playwright-report/
 .env
 .env.local
 npm-debug.log*
+
+# Hand-written service worker and fallback are source files.
+!/public/sw.js
+!/public/offline.html
+/test-results/
+/playwright-report/
