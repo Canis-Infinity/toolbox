@@ -14,3 +14,6 @@ npm-debug.log*
 !/public/offline.html
 /test-results/
 /playwright-report/
+
+# Generated from scripts/offline-page.jsx and the shared shadcn theme.
+/public/offline.html

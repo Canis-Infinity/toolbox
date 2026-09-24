@@ -9,3 +9,5 @@
 修改備援頁時同步增加 `public/sw.js` 的快取版本。快取新版本成功後才清理舊版；使用者無須清除整站資料。
 
 回歸測試：`node --test scripts/offline-check.mjs`，涵蓋安裝失敗、502／503／504、斷網、404 與 API 排除。
+
+備援頁由 `scripts/offline-page.jsx` 直接使用本站 shadcn Button／Empty 元件。`npm run build:offline` 將 React 靜態渲染結果與本站 Tailwind 主題內嵌到 `public/offline.html`；`npm run build` 會自動先生成，無需在瀏覽器下載 Next.js bundles。請修改元件來源，不要編輯產物。

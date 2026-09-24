@@ -1,4 +1,4 @@
-const CACHE = "iistw-toolbox-offline-v1";
+const CACHE = "iistw-toolbox-offline-v2";
 const OFFLINE = "/offline.html";
 self.addEventListener("install", (event) => {
   event.waitUntil(
