@@ -4,7 +4,7 @@ import { ChevronRight, Code2, Coffee, ExternalLink, House, LayoutGrid, Search } 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { MobileSidebarPreferences } from "@/components/preference-controls";
 import {
@@ -69,11 +69,7 @@ function SidebarCategory({ category, pathname, categoryName, toolName }: {
 }) {
   const categoryTools = tools.filter((tool) => tool.category === category);
   const active = pathname === `/categories/${category}` || categoryTools.some((tool) => pathname === `/tools/${tool.slug}`);
-  const [open, setOpen] = useState(active || (pathname === "/" && category === "json"));
-
-  useEffect(() => {
-    if (active) setOpen(true);
-  }, [active]);
+  const [open, setOpen] = useState(false);
 
   return (
     <Collapsible open={open} onOpenChange={setOpen} className="group/collapsible">
