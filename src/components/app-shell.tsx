@@ -9,7 +9,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const t = useTranslations("common");
 
   return (
-    <SidebarProvider defaultOpen={false}>
+    <SidebarProvider defaultOpen={true}>
       <AppSidebar />
       <SidebarInset>
         <AppHeader />
